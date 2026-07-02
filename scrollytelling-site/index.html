@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGT_USAC: análisis de redes y narrativas</title>
+
+    <!-- Password Access Protection Script (Blocking Prompt) -->
+    <script>
+        (function() {
+            var password = prompt("Por favor, introduce la contraseña de acceso:");
+            while (password !== "pikachu") {
+                if (password === null) {
+                    document.documentElement.innerHTML = "<h1 style='text-align: center; margin-top: 30vh; font-family: sans-serif; color: #e74c3c;'>Acceso Denegado</h1>";
+                    if (window.stop) window.stop();
+                    throw new Error("Acceso cancelado.");
+                }
+                password = prompt("Contraseña incorrecta. Por favor, introduce la contraseña correcta:");
+            }
+        })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="scrolly-container">
+
+        <div id="graphic">
+            <canvas id="network-canvas"></canvas>
+            <div id="legend-overlay">
+                <div class="legend-item"><span class="dot organic-dot"></span> Orgánico (90.77%)</div>
+                <div class="legend-item"><span class="dot inorganic-dot"></span> Inorgánico (9.23%)</div>
+                <div class="legend-item"><span class="dot" style="background:#eda100"></span> Medio de comunicación</div>
+                <div class="legend-item" id="zoom-hint">Desplázate para comenzar la historia</div>
+            </div>
+            <div id="tooltip"></div>
+        </div>
+
+        <div id="scroll-text">
+
+            <!-- Step 0: Introducción -->
+            <section class="step active" data-step="0">
+                <div class="step-card">
+                    <div class="meta-tag">Análisis AGT_USAC</div>
+                    <h1>Ana Glenda Tager, USAC y el plan de infraestructura</h1>
+                    <p>Se identificaron 29 publicaciones en Brand24 con un alcance mayor a 20,000 vistas sobre Ana Glenda Tager, la USAC, Ricardo Quiñonez y el plan de infraestructura. A partir de esas publicaciones semilla se construyó la red de comentarios, quote-tweets y followers/following, y se separaron las cuentas de medios de comunicación del resto de la conversación.</p>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-number">55,309</span>
+                            <span class="stat-label">Nodos (cuentas)</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">114,126</span>
+                            <span class="stat-label">Relaciones</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 1: Orgánico vs Inorgánico -->
+            <section class="step" data-step="1">
+                <div class="step-card">
+                    <div class="meta-tag">Autenticidad</div>
+                    <h2>Tráfico orgánico vs. amplificación inorgánica</h2>
+                    <p>Se clasifica como inorgánica a toda cuenta con una relación mayor a 10:1 entre cuentas seguidas y seguidores (siguiendo a más de 500 cuentas), o con mucha interacción saliente y casi ninguna respuesta.</p>
+                    <ul>
+                        <li><strong class="organic-text">Comportamiento orgánico:</strong> 50,203 cuentas (90.77%) con patrones de seguimiento normales.</li>
+                        <li><strong class="inorganic-text">Comportamiento inorgánico:</strong> 5,106 cuentas (9.23%) con patrones anómalos de follower/following o de interacción.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Step 2: Medios (cluster aparte) -->
+            <section class="step" data-step="2" data-cluster="Medios">
+                <div class="step-card">
+                    <div class="meta-tag">Clúster aparte</div>
+                    <h2>Qué dicen los medios de comunicación</h2>
+                    <p>Los 7 medios confirmados (<code>lahoragt</code>, <code>soy_502</code>, <code>eP_investiga</code>, <code>DiariodeCA</code>, <code>NuestroDiario</code>, <code>CanalAntigua</code>, <code>PublinewsGT</code>) se agrupan de forma natural en su propio clúster de la red — tiene sentido: comparten buena parte de su audiencia entre sí.</p>
+                    <div class="wordcloud-container">
+                        <img src="visuals/wc_Medios.png" alt="Nube de palabras: reacciones a tuits de medios" class="wc-image">
+                    </div>
+                    <div class="cluster-stats">
+                        <p><strong>Narrativas en las reacciones a sus tuits</strong> (comentarios y quotes sobre publicaciones de medios, 481 textos analizados):</p>
+                        <ul>
+                            <li>Decepción y traición política — 80 menciones</li>
+                            <li>USAC: fraude y crisis de rectoría — 35 menciones</li>
+                            <li>Pactos y corrupción opaca — 23 menciones</li>
+                            <li>Plan de infraestructura / Quiñonez — 4 menciones</li>
+                            <li>Figura de Ana Glenda Tager — 3 menciones</li>
+                        </ul>
+                        <h3>Medios en la red:</h3>
+                        <div class="actor-badges" id="actors-medios"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 3: Decepción y traición política -->
+            <section class="step" data-step="3" data-cluster="Decepcion_Traicion_Politica">
+                <div class="step-card">
+                    <div class="meta-tag">Clúster temático</div>
+                    <h2>Decepción y traición política</h2>
+                    <p>La narrativa más grande del corpus actual: enojo y desencanto con Bernardo Arévalo y el partido Semilla, acusaciones de tibieza y traición al voto que los llevó al poder.</p>
+                    <div class="wordcloud-container">
+                        <img src="visuals/wc_Decepcion_Traicion_Politica.png" alt="Nube de palabras: decepción y traición política" class="wc-image">
+                    </div>
+                    <div class="cluster-stats">
+                        <p><strong>Eje discursivo:</strong> "tibios", "traidor", "decepción", "cobarde", "usurpador", "legitimidad", "exilio".</p>
+                        <h3>Cuentas más activas en esta narrativa:</h3>
+                        <div class="actor-badges" id="actors-decepcion"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 4: USAC fraude y rectoría -->
+            <section class="step" data-step="4" data-cluster="USAC_Fraude_Rectoria">
+                <div class="step-card">
+                    <div class="meta-tag">Clúster temático</div>
+                    <h2>USAC: fraude y crisis de rectoría</h2>
+                    <p>Conversación centrada en la crisis de la Universidad de San Carlos: acusaciones de fraude, la figura del rector Mazariegos y el proceso de elecciones universitarias.</p>
+                    <div class="wordcloud-container">
+                        <img src="visuals/wc_USAC_Fraude_Rectoria.png" alt="Nube de palabras: USAC, fraude y crisis de rectoría" class="wc-image">
+                    </div>
+                    <div class="cluster-stats">
+                        <p><strong>Eje discursivo:</strong> "usac", "universidad", "estudiantes", "mazariegos", "rector", "fraude", "elecciones".</p>
+                        <h3>Cuentas más activas en esta narrativa:</h3>
+                        <div class="actor-badges" id="actors-usac"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 5: Pactos y corrupción -->
+            <section class="step" data-step="5" data-cluster="Pactos_y_Corrupcion">
+                <div class="step-card">
+                    <div class="meta-tag">Clúster temático</div>
+                    <h2>Pactos y corrupción opaca</h2>
+                    <p>Denuncias de pactos a puerta cerrada y corrupción.</p>
+                    <div class="wordcloud-container">
+                        <img src="visuals/wc_Pactos_y_Corrupcion.png" alt="Nube de palabras: pactos y corrupción opaca" class="wc-image">
+                    </div>
+                    <div class="cluster-stats">
+                        <p><strong>Eje discursivo:</strong> "corrupción", "pacto", "cacif", "mordida", "cómplice".</p>
+                        <h3>Cuentas más activas en esta narrativa:</h3>
+                        <div class="actor-badges" id="actors-pactos"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 6: Ana Glenda Tager -->
+            <section class="step" data-step="6" data-cluster="Ana_Glenda_Tager">
+                <div class="step-card">
+                    <div class="meta-tag">Clúster temático</div>
+                    <h2>Figura de Ana Glenda Tager</h2>
+                    <p>Menciones directas y específicas a Ana Glenda Tager como figura — un subconjunto pequeño dentro del corpus actual.</p>
+                    <div class="wordcloud-container">
+                        <img src="visuals/wc_Ana_Glenda_Tager.png" alt="Nube de palabras: figura de Ana Glenda Tager" class="wc-image">
+                    </div>
+                    <div class="cluster-stats">
+                        <p><strong>Eje discursivo:</strong> "tager", "glenda".</p>
+                        <h3>Cuentas más activas en esta narrativa:</h3>
+                        <div class="actor-badges" id="actors-tager"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 7: Plan de infraestructura / Quiñonez -->
+            <section class="step" data-step="7" data-cluster="Plan_Infraestructura_Quinonez">
+                <div class="step-card">
+                    <div class="meta-tag">Clúster temático · narrativa emergente</div>
+                    <h2>Plan de infraestructura / Ricardo Quiñonez</h2>
+                    <p>Con los datos descargados hasta ahora, este eje apenas aparece (6 cuentas, muy pocas menciones directas a "infraestructura", "Quiñonez", "aeropuerto" o "carretera"). Si este tema es central para el proyecto, probablemente falte bajar más tuits semilla enfocados específicamente aquí.</p>
+                    <div class="wordcloud-container">
+                        <img src="visuals/wc_Plan_Infraestructura_Quinonez.png" alt="Nube de palabras: plan de infraestructura y Ricardo Quiñonez" class="wc-image">
+                    </div>
+                    <div class="cluster-stats">
+                        <p><strong>Eje discursivo:</strong> "quiñonez", "infraestructura", "aeropuerto", "carretera", "obra", "contrato", "licitación", "presupuesto".</p>
+                        <h3>Cuentas identificadas:</h3>
+                        <div class="actor-badges" id="actors-infra"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 8: Cuentas inorgánicas -->
+            <section class="step" data-step="8">
+                <div class="step-card">
+                    <div class="meta-tag">Anatomía</div>
+                    <h2>Caracterización de las cuentas inorgánicas</h2>
+                    <p>La red contiene <strong>5,106 cuentas inorgánicas (9.23%)</strong> con comportamiento estructuralmente anómalo:</p>
+                    <ul>
+                        <li><strong>Falta de reciprocidad:</strong> siguen a cientos o miles de perfiles pero casi nadie las sigue de vuelta.</li>
+                        <li><strong>Interacción unidireccional:</strong> mencionan/responden mucho sin que casi nadie les responda.</li>
+                    </ul>
+                    <p>Muestra de cuentas sospechosas identificadas:</p>
+                    <div id="bot-grid" class="actor-badges"></div>
+                </div>
+            </section>
+
+            <!-- Step 9: Top hubs -->
+            <section class="step" data-step="9">
+                <div class="step-card">
+                    <div class="meta-tag">Hilos de conexión</div>
+                    <h2>Top hubs: quiénes dirigen el debate</h2>
+                    <p>Se identificaron las <strong>20 cuentas con mayor centralidad</strong> (más interacciones recibidas) como las que más impulsan las narrativas del debate. Actúan como puentes de información entre los distintos clústeres temáticos. Aquí se incluyen tanto esas 20 cuentas como los medios de comunicación confirmados.</p>
+                    <p class="highlight-text">Observa el zoom a los perfiles más influyentes y los medios — sus conexiones cruzadas conectan las distintas narrativas.</p>
+                    <div class="interactive-panel" style="margin-top: 1.5rem;">
+                        <p class="small-text">Puedes colocar el cursor sobre los nodos más grandes del canvas para ver su identificador y rol.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="js/network.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

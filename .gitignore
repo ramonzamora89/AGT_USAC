@@ -1,0 +1,15 @@
+# Datos crudos scrapeados (grandes, contienen información personal)
+Dataset/
+
+# Bibliografía de referencia (derechos de autor, no corresponde a un repo de código)
+Literatura/
+
+# Entornos / artefactos locales
+.venv/
+.DS_Store
+.claude/
+
+# Assets viejos sin uso
+Screenshot*.png
+__pycache__/
+*.pyc

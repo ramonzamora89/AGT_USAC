@@ -1,0 +1,375 @@
+/* CSS Variables and Theme Configuration */
+:root {
+    --font-family: 'Poppins', sans-serif;
+    --organic-blue: #4285F4;
+    --inorganic-red: #e74c3c;
+    --text-dark: #0f172a;
+    --text-muted: #475569;
+    --bg-light: #f8fafc;
+    --bg-white: #ffffff;
+    --border-color: #e2e8f0;
+    --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    --accent-indigo: #6366f1;
+}
+
+/* Base Reset and Layout */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
+    color: var(--text-dark);
+}
+
+h1 {
+    font-size: 1.8rem;
+}
+
+h2 {
+    font-size: 1.4rem;
+}
+
+p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    font-weight: 300;
+}
+
+strong {
+    font-weight: 600;
+}
+
+ul {
+    margin-left: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 300;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* Scrollytelling Architecture */
+#scrolly-container {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 100vw;
+}
+
+/* Sticky Graphic (Canvas Panel) */
+#graphic {
+    position: sticky;
+    top: 0;
+    width: 60vw;
+    height: 100vh;
+    background-color: #ffffff; /* Replicating clean white background from reporte_sna_d3.html */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+#network-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Scrollable Text Panel */
+#scroll-text {
+    width: 40vw;
+    padding: 0 2rem;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 10;
+}
+
+/* Individual Story Step */
+.step {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.25;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+    transform: translateY(20px);
+}
+
+.step.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Step Card UI */
+.step-card {
+    background-color: var(--bg-white);
+    padding: 2.5rem 2rem;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border-color);
+    width: 100%;
+    max-width: 520px;
+    margin: 5vh 0;
+}
+
+/* Meta Tags & Accent styling */
+.meta-tag {
+    display: inline-block;
+    background-color: #f1f5f9;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.highlight-text {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-dark);
+    border-left: 4px solid var(--organic-blue);
+    padding-left: 1rem;
+    margin-top: 1rem;
+}
+
+.hint-msg {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--text-muted);
+    background-color: #f8fafc;
+    border-radius: 8px;
+    padding: 0.75rem;
+    border: 1px dashed var(--border-color);
+}
+
+/* Color codes */
+.organic-text {
+    color: var(--organic-blue);
+}
+
+.inorganic-text {
+    color: var(--inorganic-red);
+}
+
+/* Statistical numbers */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.stat-box {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--organic-blue);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* Wordcloud Frame */
+.wordcloud-container {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: #ffffff;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.wc-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.wc-image:hover {
+    transform: scale(1.03);
+}
+
+/* Dynamic Hub Badges and Bot list */
+.actor-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.actor-badge {
+    font-family: monospace;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: #f8fafc;
+    color: var(--text-dark);
+}
+
+.actor-badge.organic {
+    border-left: 3px solid var(--organic-blue);
+    background-color: #eff6ff;
+}
+
+.actor-badge.inorganic {
+    border-left: 3px solid var(--inorganic-red);
+    background-color: #fef2f2;
+}
+
+/* Graphic Overlay & Legend styles on White Background */
+#legend-overlay {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    background-color: rgba(255, 255, 255, 0.9); /* light, blurred theme for white bg */
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 12px;
+    color: var(--text-dark);
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 5;
+    box-shadow: var(--card-shadow);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 400;
+}
+
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.organic-dot {
+    background-color: var(--organic-blue);
+}
+
+.dot.inorganic-dot {
+    background-color: var(--inorganic-red);
+}
+
+#zoom-hint {
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.4rem;
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+}
+
+/* Live Tooltip on Node Hover */
+#tooltip {
+    position: absolute;
+    pointer-events: none;
+    background-color: rgba(15, 23, 42, 0.95);
+    color: #ffffff;
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-family: var(--font-family);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 100;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#tooltip strong {
+    display: block;
+    color: #38bdf8;
+    font-family: monospace;
+    margin-bottom: 0.2rem;
+}
+
+/* RESPONSIVE DESIGN FOR MEDIUM/SMALL SCREENS */
+@media (max-width: 900px) {
+    #scrolly-container {
+        flex-direction: column;
+    }
+
+    #graphic {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    #scroll-text {
+        width: 100vw;
+        padding: 0 1rem;
+        pointer-events: none; /* allows user to interact with canvas in background if card is bypassed */
+    }
+
+    .step {
+        min-height: 100vh;
+        opacity: 0.2;
+    }
+
+    .step.active {
+        opacity: 1;
+    }
+
+    .step-card {
+        pointer-events: auto; /* allows interaction inside the card */
+        background-color: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(12px);
+        margin: 10vh auto;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    #legend-overlay {
+        bottom: auto;
+        top: 20px;
+        left: 20px;
+        font-size: 0.7rem;
+        padding: 0.75rem;
+    }
+}
